@@ -3,4 +3,4 @@ class InputManager:
         pass
 
     def get_input(self) -> str:
-        return input('GitFlow.AI >').strip().lower()
+        return input('GitFlow.AI > ').strip().lower()
