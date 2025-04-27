@@ -63,10 +63,10 @@ class GitHandler:
             return False
 
 
-repo = Repo("D:\\Projects\\FastAPI_Basic\\FastAPI-Basic")
-git_handler = GitHandler(repo)
-git_handler.checkout_branch('main')
-git_handler.add_all()
-git_handler.commit('Committed using GitPython')
-git_handler.pull('origin')
-git_handler.push('origin')
+# repo = Repo("D:\\Projects\\FastAPI_Basic\\FastAPI-Basic")
+# git_handler = GitHandler(repo)
+# git_handler.checkout_branch('main')
+# git_handler.add_all()
+# git_handler.commit('Committed using GitPython')
+# git_handler.pull('origin')
+# git_handler.push('origin')
