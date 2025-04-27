@@ -1,6 +1,6 @@
 from git import Repo, GitCommandError
 from git import Remote
-from logger import Logger
+from .logger import Logger
 
 
 class GitHandler:
