@@ -60,7 +60,11 @@ class GitCommandRouter:
         if handler:
             params = action_dict.get('params', {})
             self.logger.info(f"Performing {action}!!")
-            handler(**params)
+            try:
+                handler(**params)
+            except TypeError:
+                self.logger.error(
+                    f"Missing or invalid parameters for {action}")
             self.logger.info(f"Successfully finished performing {action}")
         else:
             self.logger.error(
