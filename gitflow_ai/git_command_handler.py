@@ -1,16 +1,22 @@
-from git import Repo, GitCommandError
+from git import Repo, GitCommandError, InvalidGitRepositoryError
+from git.exc import NotADirectoryError
 from git import Remote
 from .logger import Logger
 
 
 class GitHandler:
 
-    def __init__(self, repo: Repo = None):
-        if not repo:
-            self.repo = Repo()
-        else:
-            self.repo = repo
+    def __init__(self, repo_path: str):
         self.logger = Logger()
+        if not repo_path or repo_path == '':
+            raise TypeError("Path to repo not found")
+        else:
+            try:
+                self.repo = Repo(repo_path)
+            except (InvalidGitRepositoryError, NotADirectoryError) as e:
+                self.logger.error(
+                    f"GitHandler init failed : {e}")
+                raise
 
     def add_all(self):
         self.repo.git.add(A=True)
