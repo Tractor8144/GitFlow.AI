@@ -27,7 +27,6 @@ def main():
         if user_input in ['quit', 'exit', 'bye', 'see you later']:
             print("Quitting GitFlow.AI. Goodbye!")
             sys.exit(0)
-        print(f'You asked command {user_input}')
         try:
             action_list = parser.parse(user_input)
         except:

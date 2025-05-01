@@ -15,11 +15,18 @@ class ActionDispatcher:
 
     def dispatch(self, action_list: list) -> None:
         for action in action_list:
-            action_name = action.get('action')
+            action_name = action.get('action', '').lower()
             if action_name in self.git_actions:
                 self._handle_git_action(action)
             elif action_name in self.repo_actions:
-                self._handle_repo_action(action)
+                try:
+                    self._handle_repo_action(action)
+                except ValueError:
+                    self.logger.error('Sorry! I don\'t understand!')
+            elif action_name == 'quit':
+                raise KeyboardInterrupt
+            elif action_name == 'help':
+                self.logger.info(action.get('text_output'))
             else:
                 self.logger.warning(f"Sorry, do not understand {action_name}")
                 raise ValueError(f"Unknown action received: {action_name}")
@@ -43,8 +50,17 @@ class ActionDispatcher:
             if repo_name == '':
                 self.logger.warning('No known repos yet')
                 raise ValueError('No known repos yet')
+        self.logger.info(action.get('text_output'))
 
     def _handle_git_action(self, action: dict):
-        git_handler = self.repo_manager.get_active_repo_handler()
+        try:
+            git_handler = self.repo_manager.get_active_repo_handler()
+        except NotADirectoryError:
+            self.logger.error('No known repo yet')
+            return
         git_router = GitCommandRouter(git_handler)
-        git_router.route(action)
+        try:
+            git_router.route(action)
+        except TypeError:
+            self.logger.error("sorry, I do not understand!")
+        self.logger.info(action.get('text_output'))

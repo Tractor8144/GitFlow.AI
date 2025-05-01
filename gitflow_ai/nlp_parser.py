@@ -14,27 +14,31 @@ Your task:
   - "action": One of ["add_all", "commit", "get_branch", "create_branch", "checkout_branch", "pull", "push", "add_repo", "switch_repo"]
   - "params": Dictionary of parameters required for that action.
   - "raw_input": The original user text.
+  - "text_output" : Text describing what is being done in a very user friendly language.
 
 Format to strictly follow:
 [
   {
     "action": "<action_name>",
     "params": { "<parameter_key>": "<parameter_value>" },
-    "raw_input": "<original user input>"
+    "raw_input": "<original user input>",
+    "text_output": "<output to user in user friendly tone>"
   },
   ...
 ]
 
 Specific Action Rules:
-- "add_all": No parameters.
+- "add_all": No parameters. (also known as staging in context of git)
 - "commit": Requires "message" (commit message).
 - "get_branch": No parameters.
 - "create_branch": Requires "branch_name" (name of new branch).
 - "checkout_branch": Requires "branch_name" (name to checkout).
 - "pull" / "push": Requires "remote_name" (default to "origin" if missing).
-- "add_repo": Requires "repo_name" (nickname) and "repo_path" (full local path).
-- "switch_repo": Requires "repo_name" (nickname to switch to).
+- "add_repo": Requires "repo_name" (identifier) and "repo_path" (full local path).
+- "switch_repo": Requires "repo_name" (identifier to switch to).
 - "get_active_repo" : No parameters
+- "quit" : No parameters -> this quits/says toodles to the CLI tool
+- "help" : No parameters -> this gives a short overview of what can be achieved with the CLI. Returns it in the 'text_output' in the JSON.
 
 General Rules:
 - Only use actions from the allowed list.
@@ -56,4 +60,4 @@ Important:
             actions_list = json.loads(raw_response)
             return actions_list
         except json.JSONDecodeError:
-            raise ValueError("Failed to parse GPT response!")
+            raise ValueError(f"Failed to parse GPT response : {raw_response}")
