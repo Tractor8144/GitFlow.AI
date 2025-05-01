@@ -1,5 +1,4 @@
 from git import Repo, GitCommandError, InvalidGitRepositoryError
-from git.exc import NotADirectoryError
 from git import Remote
 from .logger import Logger
 

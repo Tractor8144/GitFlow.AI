@@ -1,7 +1,7 @@
-from repo_manager import RepoManager
-from git_command_handler import GitHandler
-from git_router import GitCommandRouter
-from logger import Logger
+from .repo_manager import RepoManager
+from .git_command_handler import GitHandler
+from .git_router import GitCommandRouter
+from .logger import Logger
 
 
 class ActionDispatcher:
