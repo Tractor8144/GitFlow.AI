@@ -30,10 +30,13 @@ def main():
         try:
             action_list = parser.parse(user_input)
         except:
-            print("Sorry! Could not understand the message. Please try again!")
+            print("Sorry! I could not understand the message.")
             continue
-        action_dispatcher.dispatch(action_list)
-        # router.route_list(action_list)
+        try:
+            action_dispatcher.dispatch(action_list)
+        except ValueError:
+            print("Sorry, I could not understand the message.")
+            # router.route_list(action_list)
 
 
 if __name__ == "__main__":
