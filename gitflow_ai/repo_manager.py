@@ -10,7 +10,9 @@ class RepoManager:
         self.logger = Logger()
 
     # Makes it active repo
-    def add_repo(self, name: str, path: str) -> None:
+    def add_repo(self, name: str, path: str) -> bool:
+        if not os.path.exists(path):
+            return False
         if not name or name == '':
             name = os.path.basename(path)
             self.logger.info(f'Feel free to refer to your repo by {name}')
@@ -18,6 +20,7 @@ class RepoManager:
             self.logger.info(f'path to repo {name} changed!')
         self._repos[name] = path
         self._active_repo = name
+        return True
 
     def switch_repo(self, name: str) -> bool:
         if name in self._repos.keys():
