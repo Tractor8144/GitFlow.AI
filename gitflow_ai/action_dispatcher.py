@@ -19,14 +19,13 @@ class ActionDispatcher:
             if action_name in self.git_actions:
                 self._handle_git_action(action)
             elif action_name in self.repo_actions:
-                try:
-                    self._handle_repo_action(action)
-                except ValueError:
-                    self.logger.error('Sorry! I don\'t understand!')
+                self._handle_repo_action(action)
             elif action_name == 'quit':
                 raise KeyboardInterrupt
             elif action_name == 'help':
-                self.logger.info(action.get('text_output'))
+                self.logger.info(action.get('text_success'))
+            elif action_name == 'unknown':
+                self.logger.info(action.get('text_error'))
             else:
                 self.logger.warning(f"Sorry, do not understand {action_name}")
                 raise ValueError(f"Unknown action received: {action_name}")
@@ -41,16 +40,14 @@ class ActionDispatcher:
             params = action.get('params')
             success = self.repo_manager.switch_repo(params.get('repo_name'))
             if not success:
-                self.logger.error(
-                    f'repo named {params.get('repo_name')} not found')
-                raise ValueError(
-                    f'repo named {params.get('repo_name')} not found')
+                self.logger.error(action.get('text_error'))
+                return
         elif action_name == 'get_active_repo':
             repo_name = self.repo_manager.get_active_repo_name()
             if repo_name == '':
-                self.logger.warning('No known repos yet')
-                raise ValueError('No known repos yet')
-        self.logger.info(action.get('text_output'))
+                self.logger.error(action.get('text_error'))
+                return
+        self.logger.info(action.get('text_success'))
 
     def _handle_git_action(self, action: dict):
         try:
@@ -62,5 +59,7 @@ class ActionDispatcher:
         try:
             git_router.route(action)
         except TypeError:
-            self.logger.error("sorry, I do not understand!")
-        self.logger.info(action.get('text_output'))
+            self.logger.error(action.get('text_error'))
+            return
+            # self.logger.error("sorry, I do not understand!")
+        self.logger.info(action.get('text_success'))
